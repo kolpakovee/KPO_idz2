@@ -13,14 +13,12 @@ public class Main {
 
         FileIO fileIO = new FileIO(rootFolderPath);
 
-        fileIO.readDirectory(fileIO.rootFolder);
+        Graph graph = new Graph();
 
-        fileIO.topologicalSort();
+        fileIO.readDirectory(fileIO.rootFolder, graph);
 
-        if (fileIO.sortedGraph == null){
-            return;
-        }
+        String sortedGraph = graph.getSortedGraph();
 
-        System.out.print(fileIO.getStringConcatenation());
+        System.out.print(sortedGraph);
     }
 }
