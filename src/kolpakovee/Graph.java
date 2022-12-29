@@ -10,7 +10,7 @@ public class Graph {
      */
     private ArrayList<Vertex> sortedGraph;
     /**
-     * Массив вершин, который заполняется на этапе чтения текстовых файлов.
+     * Список вершин, который заполняется на этапе чтения текстовых файлов.
      * С ним работают почти все методы, когда определяют Vertex по пути до файла.
      */
     private final ArrayList<Vertex> fileGraph;
@@ -19,27 +19,43 @@ public class Graph {
      * По умолчанию имеет значение false, но если вызвать метод проверки на цикличность,
      * то может поменять своё значение.
      */
-    boolean isCyclic = false;
+    private boolean isCyclic = false;
 
+    /**
+     * Конструктор, который инициализирует список fileGraph.
+     */
     public Graph() {
         fileGraph = new ArrayList<>();
     }
 
+    /**
+     * Добавление вершины в граф.
+     *
+     * @param vertex вершина.
+     */
     void addVertex(Vertex vertex) {
         fileGraph.add(vertex);
     }
 
+    /**
+     * Метод, который вызывает сортировку графа и возвращает строку.
+     *
+     * @return содержимое файлов в нужном порядке.
+     */
     public String getSortedGraph() {
         topologicalSort();
         StringBuilder sb = new StringBuilder();
+        if (sortedGraph == null) {
+            return "Найдена циклическая зависимость";
+        }
         for (Vertex vertex : sortedGraph) {
-            sb.append(vertex.data);
+            sb.append(vertex.getData());
         }
         return sb.toString();
     }
 
     /**
-     * Метод
+     * Метод,который проверет граф на цикличность и вызывает топологическую сортровку.
      */
     private void topologicalSort() {
         if (isCyclic()) {
@@ -47,12 +63,17 @@ public class Graph {
         }
         sortedGraph = new ArrayList<>();
         for (Vertex vertex : fileGraph) {
-            if (!vertex.isVisited) {
-                topologicalSort(vertex.file.getAbsolutePath());
+            if (!vertex.getAttendance()) {
+                topologicalSort(vertex.getFile().getAbsolutePath());
             }
         }
     }
 
+    /**
+     * Метод, выполняющий топологическую сортировку.
+     *
+     * @param path путь к вершине, относительно которой выполнятеся топологическая сортировка.
+     */
     private void topologicalSort(String path) {
         // получаем вершину
         Vertex inputVertex = getVertexByPath(path);
@@ -61,11 +82,12 @@ public class Graph {
             return;
         }
         // отмечаем, что уже посещали вершину
-        inputVertex.isVisited = true;
+        inputVertex.setAttendance(true);
 
-        for (String str : inputVertex.neighboringVertices) {
+        for (String str : inputVertex.getNeighboringVertices()) {
             Vertex vertex = getVertexByPath(str);
-            if (vertex.isVisited) {
+            assert vertex != null;
+            if (vertex.getAttendance()) {
                 continue;
             }
             topologicalSort(str);
@@ -75,20 +97,37 @@ public class Graph {
     }
 
     // Сделать вход с вершины в которую не идут стрелки
+
+    /**
+     * Метод, проверяющий на граф на цикличность.
+     *
+     * @return true, если граф содержит циклы, иначе false.
+     */
     public boolean isCyclic() {
-        isCyclic(fileGraph.get(0).file.getAbsolutePath());
+        isCyclic(fileGraph.get(0).getFile().getAbsolutePath());
         return isCyclic;
     }
 
+    /**
+     * проверяет, есть ли вершна в графе.
+     *
+     * @param path путь к вершине.
+     * @return вершина, если она есть в графе, иначе null
+     */
     private Vertex getVertexByPath(String path) {
         for (Vertex vertex : fileGraph) {
-            if (path.equals(vertex.file.getAbsolutePath())) {
+            if (path.equals(vertex.getFile().getAbsolutePath())) {
                 return vertex;
             }
         }
         return null;
     }
 
+    /**
+     * Метод для провери графа на цикличнсть.
+     *
+     * @param path путь к вершине, с которой начинаем проверку.
+     */
     public void isCyclic(String path) {
         // получаем вершину
         Vertex inputVertex = getVertexByPath(path);
@@ -99,20 +138,20 @@ public class Graph {
         }
 
         // красим вершину в серый цвет
-        inputVertex.color = Colors.GREY;
+        inputVertex.setColor(Colors.GREY);
 
-
-        for (String str : inputVertex.neighboringVertices) {
+        for (String str : inputVertex.getNeighboringVertices()) {
             Vertex vertex = getVertexByPath(str);
-            if (vertex.color == Colors.GREY) {
+            assert vertex != null;
+            if (vertex.getColor() == Colors.GREY) {
                 isCyclic = true;
                 return;
             }
-            if (vertex.color == Colors.WHITE) {
+            if (vertex.getColor() == Colors.WHITE) {
                 isCyclic(str);
             }
         }
 
-        inputVertex.color = Colors.BLACK;
+        inputVertex.setColor(Colors.BLACK);
     }
 }

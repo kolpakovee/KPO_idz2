@@ -15,7 +15,7 @@ public class Main {
 
         Graph graph = new Graph();
 
-        fileIO.readDirectory(fileIO.rootFolder, graph);
+        fileIO.readDirectory(fileIO.getRootFolder(), graph);
 
         String sortedGraph = graph.getSortedGraph();
 

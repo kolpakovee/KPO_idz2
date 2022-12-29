@@ -7,17 +7,30 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Класс, предназначенный для работы с текстовыми файлами и директориями.
+ * Класс, предназначенный для чтения/записи в текстовые файлы и работы с директориями.
  */
 public class FileIO {
-    File rootFolder;
     /**
-     * Конструктор класса. Инициализирует fileGraph и rootFolder.
+     * Полный путь к корневой папке
+     */
+    private final File rootFolder;
+
+    /**
+     * Конструктор класса. Инициализирует rootFolder.
      *
      * @param path пусть к корневой папке.
      */
     FileIO(String path) {
         rootFolder = new File(path);
+    }
+
+    /**
+     * Метод для инкапсуляции rootFolder
+     *
+     * @return полный путь к корневой папке
+     */
+    public File getRootFolder() {
+        return rootFolder;
     }
 
     /**
@@ -41,10 +54,11 @@ public class FileIO {
     /**
      * Метод, предназначенный для чтения текстового файла. По данным,
      * полученным из него, создаёт вершину в графе.
+     *
      * @param path полный путь к текстовому файлу.
      * @return вершину для графа.
      * @throws IOException выбрасывает исключени, если произошёл сбой
-     * при чтении фалйа.
+     *                     при чтении фалйа.
      */
     public Vertex readFile(String path) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -58,11 +72,12 @@ public class FileIO {
 
             if (line.startsWith("require")) {
                 String absolutePath = line.substring(9, line.length() - 1);
-                vertex.neighboringVertices.add(absolutePath);
+                vertex.getNeighboringVertices().add(absolutePath);
             }
         }
 
-        vertex.data = sb.toString();
+        vertex.setData(sb.toString());
+
         return vertex;
     }
 }
