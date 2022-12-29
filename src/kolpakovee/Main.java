@@ -33,12 +33,12 @@ public class Main {
             for (Vertex vertex : sortedGraph) {
                 System.out.println(vertex.getFile().getName());
             }
+            System.out.println("Отсортированные данные файлов:");
         }
 
         // получаем строку отсортированной содержимое файлов
         String sortedFileData = graph.sortedFileData();
-
-        System.out.println("Отсортированные данные файлов:");
+        
         System.out.print(sortedFileData);
     }
 }
