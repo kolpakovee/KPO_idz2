@@ -33,17 +33,11 @@ public class Graph {
      *
      * @param vertex вершина.
      */
-    void addVertex(Vertex vertex) {
+    public void addVertex(Vertex vertex) {
         fileGraph.add(vertex);
     }
 
-    /**
-     * Метод, который вызывает сортировку графа и возвращает строку.
-     *
-     * @return содержимое файлов в нужном порядке.
-     */
-    public String getSortedGraph() {
-        topologicalSort();
+    public String sortedFileData() {
         StringBuilder sb = new StringBuilder();
         if (sortedGraph == null) {
             return "Найдена циклическая зависимость";
@@ -52,6 +46,16 @@ public class Graph {
             sb.append(vertex.getData());
         }
         return sb.toString();
+    }
+
+    /**
+     * Метод, который вызывает сортировку графа и возвращает отсортированный список вершин.
+     *
+     * @return отсортированный список вершин.
+     */
+    public ArrayList<Vertex> getSortedGraph() {
+        topologicalSort();
+        return sortedGraph;
     }
 
     /**

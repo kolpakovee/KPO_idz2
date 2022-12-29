@@ -30,6 +30,7 @@ public class Vertex {
 
     /**
      * Конструктор с одним пераметром.
+     *
      * @param file - основной файл.
      */
     Vertex(File file) {
