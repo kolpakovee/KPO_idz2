@@ -10,6 +10,8 @@ public class Main {
         String rootFolderPath;
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Введите путь к корневой папке:");
+
         //считываем путь к корневой папке
         rootFolderPath = scanner.next();
 
